@@ -410,6 +410,8 @@ class TestPowerVMInspector(base.BaseTestCase):
         self.assertEqual(1000, stats1.write_requests)
         self.assertEqual(100000, stats1.write_bytes)
         self.assertEqual(0, stats1.errors)
+        self.assertEqual(0, stats1.wr_total_times)
+        self.assertEqual(0, stats1.rd_total_times)
 
         stats2 = resp[1]
         self.assertEqual('vscsi2', stats2.device)
@@ -417,7 +419,9 @@ class TestPowerVMInspector(base.BaseTestCase):
         self.assertEqual(200000, stats2.read_bytes)
         self.assertEqual(2000, stats2.write_requests)
         self.assertEqual(200000, stats2.write_bytes)
-        self.assertEqual(0, stats1.errors)
+        self.assertEqual(0, stats2.errors)
+        self.assertEqual(0, stats2.wr_total_times)
+        self.assertEqual(0, stats2.rd_total_times)
 
         # Next is the vFC metric
         stats3 = resp[2]
@@ -427,3 +431,5 @@ class TestPowerVMInspector(base.BaseTestCase):
         self.assertEqual(3000, stats3.write_requests)
         self.assertEqual(300000, stats3.write_bytes)
         self.assertEqual(0, stats3.errors)
+        self.assertEqual(0, stats3.wr_total_times)
+        self.assertEqual(0, stats3.rd_total_times)

@@ -398,7 +398,8 @@ class PowerVMInspector(virt_inspector.Inspector):
             yield virt_inspector.DiskStats(
                 device=adpt.name, read_requests=adpt.num_reads,
                 read_bytes=adpt.read_bytes, write_requests=adpt.num_writes,
-                write_bytes=adpt.write_bytes, errors=0)
+                write_bytes=adpt.write_bytes, errors=0, wr_total_times=0,
+                rd_total_times=0)
 
     def inspect_disk_iops(self, instance):
         """Inspect the Disk Input/Output operations per second for an instance.
