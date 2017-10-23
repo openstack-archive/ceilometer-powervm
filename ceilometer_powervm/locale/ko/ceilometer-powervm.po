@@ -6,37 +6,33 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: ceilometer-powervm 4.0.1.dev1\n"
+"Project-Id-Version: ceilometer-powervm 5.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-04-20 10:16-0400\n"
-"PO-Revision-Date: 2017-04-20 10:16-0400\n"
+"POT-Creation-Date: 2017-10-03 04:18-0400\n"
+"PO-Revision-Date: 2017-10-03 04:18-0400\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.4.0\n"
+"Generated-By: Babel 2.5.1\n"
+"Language: en_US\n"
+"Plural-Forms: nplurals=1; plural=0;"
 
 #: ceilometer_powervm/compute/virt/powervm/inspector.py:82
 #, python-format
 msgid "Expected exactly one host; found %d."
 msgstr "정확히 하나의 호스트를 예상했지만 %d개를 찾았습니다."
 
-#: ceilometer_powervm/compute/virt/powervm/inspector.py:100
-#: ceilometer_powervm/compute/virt/powervm/inspector.py:137
-#: ceilometer_powervm/compute/virt/powervm/inspector.py:262
-#: ceilometer_powervm/compute/virt/powervm/inspector.py:324
-#: ceilometer_powervm/compute/virt/powervm/inspector.py:405
-#: ceilometer_powervm/compute/virt/powervm/inspector.py:449
+#: ceilometer_powervm/compute/virt/powervm/inspector.py:106
+#: ceilometer_powervm/compute/virt/powervm/inspector.py:245
+#: ceilometer_powervm/compute/virt/powervm/inspector.py:303
+#: ceilometer_powervm/compute/virt/powervm/inspector.py:381
+#: ceilometer_powervm/compute/virt/powervm/inspector.py:423
 #, python-format
 msgid "VM %s not found in PowerVM Metrics Sample."
 msgstr "PowerVM 메트릭 샘플에서 VM %s을(를) 찾을 수 없습니다."
 
-#: ceilometer_powervm/compute/virt/powervm/inspector.py:160
-#, python-format
-msgid "Unable to derive CPU Utilization for VM %s."
-msgstr "VM %s의 CPU 이용률을 얻을 수 없습니다."
-
-# ENGL1SH_VERS10N 18067_2 DO NOT REMOVE OR CHANGE THIS LINE
+# ENGL1SH_VERS10N 12083_2 DO NOT REMOVE OR CHANGE THIS LINE
 # T9N_SRC_ID 33
-# T9N_SH1P_STR1NG PV133AAP001 2
+# T9N_SH1P_STR1NG VC140AAP001 2
