@@ -28,7 +28,6 @@ from pypowervm.wrappers import network as pvm_net
 
 from ceilometer.compute.virt import inspector as virt_inspector
 from ceilometer_powervm.compute.virt.powervm.i18n import _
-from ceilometer_powervm.compute.virt.powervm.i18n import _LW
 
 LOG = logging.getLogger(__name__)
 
@@ -138,10 +137,10 @@ class PowerVMInspector(virt_inspector.Inspector):
             # the CPU utilization within the last X seconds...because to THIS
             # host it's new (only in the cur_metric).  So we error out, the
             # inspector will use a debug message in the log.
-            LOG.warning(_LW("Unable to derive CPU Utilization for VM %s. "
-                            "It is either a new VM or was recently migrated. "
-                            "It will be collected in the next inspection "
-                            "cycle."), instance.name)
+            LOG.warning('Unable to derive CPU Utilization for VM %s. It is '
+                        'either a new VM or was recently migrated. It will be '
+                        'collected in the next inspection cycle.',
+                        instance.name)
             return virt_inspector.InstanceStats(
                 cpu_time=cpu_time, cpu_number=cpu_num)
 
