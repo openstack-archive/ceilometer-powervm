@@ -1,5 +1,5 @@
 /build/
-.testrepository
+.stestr/
 .tox/
 ceilometer_powervm.egg-info/
 *.pyc
@@ -7,3 +7,5 @@ doc/build
 AUTHORS
 ChangeLog
 /.idea/
+.coverage
+cover/
