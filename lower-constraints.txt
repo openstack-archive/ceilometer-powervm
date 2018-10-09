@@ -4,6 +4,7 @@ automaton==1.9.0
 Babel==2.3.4
 bashate==0.5.1
 cachetools==2.0.0
+ceilometer==11.0.0
 contextlib2==0.4.0
 coverage==4.0
 debtcollector==1.2.0
