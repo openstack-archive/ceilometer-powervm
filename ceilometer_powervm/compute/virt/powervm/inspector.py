@@ -1,4 +1,4 @@
-# Copyright 2015, 2017 IBM Corp.
+# Copyright 2015, 2019 IBM Corp.
 #
 # All Rights Reserved.
 #
@@ -83,7 +83,7 @@ class PowerVMInspector(virt_inspector.Inspector):
         LOG.debug("Host UUID: %s" % hosts[0].uuid)
         return hosts[0].uuid
 
-    def inspect_instance(self, instance, duration=None):
+    def inspect_instance(self, instance, duration):
         """Inspect the statistics for an instance.
 
         :param instance: the target instance
@@ -225,10 +225,15 @@ class PowerVMInspector(virt_inspector.Inspector):
             child_type=pvm_net.CNA.schema_type)
         return pvm_net.CNA.wrap(client_cna_resp)
 
-    def inspect_vnics(self, instance):
+    def inspect_vnics(self, instance, duration):
         """Inspect the vNIC statistics for an instance.
 
         :param instance: the target instance
+        :param duration: the last 'n' seconds, over which the value should be
+               inspected.
+
+               The PowerVM implementation does not make use of the duration
+               field.
         :return: for each vNIC, the number of bytes & packets
                  received and transmitted
         """
@@ -277,7 +282,7 @@ class PowerVMInspector(virt_inspector.Inspector):
                 tx_drop=0,
                 tx_errors=0)
 
-    def inspect_vnic_rates(self, instance, duration=None):
+    def inspect_vnic_rates(self, instance, duration):
         """Inspect the vNIC rate statistics for an instance.
 
         :param instance: the target instance
@@ -358,12 +363,17 @@ class PowerVMInspector(virt_inspector.Inspector):
                 mac=mac, fref=None, parameters=None,
                 rx_bytes_rate=rx_rate, tx_bytes_rate=tx_rate)
 
-    def inspect_disks(self, instance):
+    def inspect_disks(self, instance, duration):
         """Inspect the disk statistics for an instance.
 
         The response is a generator of the values.
 
         :param instance: the target instance
+        :param duration: the last 'n' seconds, over which the value should be
+               inspected.
+
+               The PowerVM implementation does not make use of the duration
+               field.
         :return disk: The Disk indicating the device for the storage device.
         :return stats: The DiskStats indicating the read/write data to the
                        device.
@@ -400,12 +410,17 @@ class PowerVMInspector(virt_inspector.Inspector):
                 write_bytes=adpt.write_bytes, errors=0, wr_total_times=0,
                 rd_total_times=0)
 
-    def inspect_disk_iops(self, instance):
+    def inspect_disk_iops(self, instance, duration):
         """Inspect the Disk Input/Output operations per second for an instance.
 
         The response is a generator of the values.
 
         :param instance: the target instance
+        :param duration: the last 'n' seconds, over which the value should be
+               inspected.
+
+               The PowerVM implementation does not make use of the duration
+               field.
         :return disk: The Disk indicating the device for the storage device.
         :return stats: The DiskIOPSStats indicating the I/O operations per
                        second for the device.
