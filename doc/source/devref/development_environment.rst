@@ -34,7 +34,7 @@ Getting the code
 
 Grab the code::
 
-    git clone git://git.openstack.org/stackforge/ceilometer-powervm
+    git clone https://git.openstack.org/openstack/ceilometer-powervm
     cd ceilometer-powervm
 
 Setting up your environment
