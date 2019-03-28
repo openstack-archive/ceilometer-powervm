@@ -1,4 +1,4 @@
-# Copyright 2015, 2017 IBM Corp.
+# Copyright 2015, 2019 IBM Corp.
 #
 # All Rights Reserved.
 #
@@ -85,7 +85,7 @@ class TestPowerVMInspector(base.BaseTestCase):
         # in the sample
         self.mock_metrics.get_latest_metric.return_value = None, None
         self.assertRaises(virt_inspector.InstanceNotFoundException,
-                          self.inspector.inspect_instance, mock.Mock())
+                          self.inspector.inspect_instance, mock.Mock(), None)
 
         def mock_metric(util_cap, util_uncap, idle, donated, entitled):
             """Helper method to create mock proc metrics."""
@@ -103,7 +103,7 @@ class TestPowerVMInspector(base.BaseTestCase):
         self.mock_metrics.get_latest_metric.return_value = (
             mock.Mock(), mock_metric(7000, 50, 1000, 5000, 10000))
         self.mock_metrics.get_previous_metric.return_value = None, None
-        resp = self.inspector.inspect_instance(mock.Mock())
+        resp = self.inspector.inspect_instance(mock.Mock(), None)
         self.assertEqual(7050, resp.cpu_time)
         self.assertEqual(12, resp.cpu_number)
 
@@ -114,7 +114,7 @@ class TestPowerVMInspector(base.BaseTestCase):
         self.mock_metrics.get_previous_metric.return_value = mock.Mock(), prev
 
         # Execute and validate
-        resp = self.inspector.inspect_instance(mock.Mock())
+        resp = self.inspector.inspect_instance(mock.Mock(), None)
         self.assertEqual(.5, resp.cpu_util)
 
         # Mock an instance with a dedicated processor, but idling and donating
@@ -126,7 +126,7 @@ class TestPowerVMInspector(base.BaseTestCase):
         self.mock_metrics.get_previous_metric.return_value = mock.Mock(), prev
 
         # Execute and validate
-        resp = self.inspector.inspect_instance(mock.Mock())
+        resp = self.inspector.inspect_instance(mock.Mock(), None)
         self.assertEqual(51.0, resp.cpu_util)
 
         # Mock an instance with a shared processor.  By nature, this doesn't
@@ -138,7 +138,7 @@ class TestPowerVMInspector(base.BaseTestCase):
         self.mock_metrics.get_previous_metric.return_value = mock.Mock(), prev
 
         # Execute and validate
-        resp = self.inspector.inspect_instance(mock.Mock())
+        resp = self.inspector.inspect_instance(mock.Mock(), None)
         self.assertEqual(80.0, resp.cpu_util)
 
         # Mock an instance with a shared processor - but using cycles from
@@ -151,7 +151,7 @@ class TestPowerVMInspector(base.BaseTestCase):
 
         # Execute and validate.  This should be running at 300% CPU
         # utilization.  Fast!
-        resp = self.inspector.inspect_instance(mock.Mock())
+        resp = self.inspector.inspect_instance(mock.Mock(), None)
         self.assertEqual(300.0, resp.cpu_util)
 
         # Mock an instance that hasn't been started yet.
@@ -161,7 +161,7 @@ class TestPowerVMInspector(base.BaseTestCase):
         self.mock_metrics.get_previous_metric.return_value = mock.Mock(), prev
 
         # This should have 0% utilization
-        resp = self.inspector.inspect_instance(mock.Mock())
+        resp = self.inspector.inspect_instance(mock.Mock(), None)
         self.assertEqual(0.0, resp.cpu_util)
 
     @staticmethod
@@ -211,15 +211,16 @@ class TestPowerVMInspector(base.BaseTestCase):
         # Validate that an error is raised if the instance can't be found in
         # the sample data.
         self.mock_metrics.get_latest_metric.return_value = None, None
-        self.assertRaises(virt_inspector.InstanceNotFoundException,
-                          list, self.inspector.inspect_vnics(mock.Mock()))
+        self.assertRaises(virt_inspector.InstanceNotFoundException, list,
+                          self.inspector.inspect_vnics(mock.Mock(), None))
 
         # Validate that no data is returned if there is a current metric,
         # just no network within it.
         mock_empty_net = mock.MagicMock()
         mock_empty_net.network = None
         self.mock_metrics.get_latest_metric.return_value = None, mock_empty_net
-        self.assertEqual([], list(self.inspector.inspect_vnics(mock.Mock())))
+        self.assertEqual(
+            [], list(self.inspector.inspect_vnics(mock.Mock(), None)))
 
         # Build a couple CNAs and verify we get the proper list back
         mock_wrap.return_value = self._build_mock_cnas()
@@ -227,7 +228,7 @@ class TestPowerVMInspector(base.BaseTestCase):
         mock_metrics = self._build_cur_mock_vnic_metrics()
         self.mock_metrics.get_latest_metric.return_value = None, mock_metrics
 
-        resp = list(self.inspector.inspect_vnics(mock.Mock()))
+        resp = list(self.inspector.inspect_vnics(mock.Mock(), None))
         self.assertEqual(3, len(resp))
 
         stats1 = resp[0]
@@ -249,16 +250,16 @@ class TestPowerVMInspector(base.BaseTestCase):
         # the sample data.
         self.mock_metrics.get_latest_metric.return_value = None, None
         self.mock_metrics.get_previous_metric.return_value = None, None
-        self.assertRaises(virt_inspector.InstanceNotFoundException,
-                          list, self.inspector.inspect_vnic_rates(mock.Mock()))
+        self.assertRaises(virt_inspector.InstanceNotFoundException, list,
+                          self.inspector.inspect_vnic_rates(mock.Mock(), None))
 
         # Validate that no data is returned if there is a current metric,
         # just no network within it.
         mock_empty_net = mock.MagicMock()
         mock_empty_net.network = None
         self.mock_metrics.get_latest_metric.return_value = None, mock_empty_net
-        self.assertEqual([],
-                         list(self.inspector.inspect_vnic_rates(mock.Mock())))
+        self.assertEqual(
+            [], list(self.inspector.inspect_vnic_rates(mock.Mock(), None)))
 
         # Build the response LPAR data
         mock_wrap.return_value = self._build_mock_cnas()
@@ -276,7 +277,7 @@ class TestPowerVMInspector(base.BaseTestCase):
                                                               mock_prev)
 
         # Execute
-        resp = list(self.inspector.inspect_vnic_rates(mock.Mock()))
+        resp = list(self.inspector.inspect_vnic_rates(mock.Mock(), None))
         self.assertEqual(3, len(resp))
 
         # First metric.  No delta
@@ -335,15 +336,15 @@ class TestPowerVMInspector(base.BaseTestCase):
         # the sample data.
         self.mock_metrics.get_latest_metric.return_value = None, None
         self.mock_metrics.get_previous_metric.return_value = None, None
-        self.assertRaises(virt_inspector.InstanceNotFoundException,
-                          list, self.inspector.inspect_disk_iops(mock.Mock()))
+        self.assertRaises(virt_inspector.InstanceNotFoundException, list,
+                          self.inspector.inspect_disk_iops(mock.Mock(), None))
 
         # Validate that no data is returned if there is a current metric,
         # just no storage within it.
         mock_empty_st = mock.MagicMock(storage=None)
         self.mock_metrics.get_latest_metric.return_value = None, mock_empty_st
-        self.assertEqual([],
-                         list(self.inspector.inspect_disk_iops(mock.Mock())))
+        self.assertEqual(
+            [], list(self.inspector.inspect_disk_iops(mock.Mock(), None)))
 
         # Current metric data
         mock_cur = self._build_cur_mock_stor_metrics()
@@ -351,8 +352,8 @@ class TestPowerVMInspector(base.BaseTestCase):
         self.mock_metrics.get_latest_metric.return_value = cur_date, mock_cur
 
         # Validate that if there is no previous data, get no data back.
-        self.assertEqual([],
-                         list(self.inspector.inspect_disk_iops(mock.Mock())))
+        self.assertEqual(
+            [], list(self.inspector.inspect_disk_iops(mock.Mock(), None)))
 
         # Build the previous
         mock_prev = self._build_prev_mock_stor_metrics()
@@ -361,7 +362,7 @@ class TestPowerVMInspector(base.BaseTestCase):
                                                               mock_prev)
 
         # Execute
-        resp = list(self.inspector.inspect_disk_iops(mock.Mock()))
+        resp = list(self.inspector.inspect_disk_iops(mock.Mock(), None))
         self.assertEqual(3, len(resp))
 
         # Two vSCSI's
@@ -383,15 +384,15 @@ class TestPowerVMInspector(base.BaseTestCase):
         # Validate that an error is raised if the instance can't be found in
         # the sample data.
         self.mock_metrics.get_latest_metric.return_value = None, None
-        self.assertRaises(virt_inspector.InstanceNotFoundException,
-                          list, self.inspector.inspect_disks(mock.Mock()))
+        self.assertRaises(virt_inspector.InstanceNotFoundException, list,
+                          self.inspector.inspect_disks(mock.Mock(), None))
 
         # Validate that no data is returned if there is a current metric,
         # just no storage within it.
         mock_empty_st = mock.MagicMock(storage=None)
         self.mock_metrics.get_latest_metric.return_value = None, mock_empty_st
         self.assertEqual([],
-                         list(self.inspector.inspect_disks(mock.Mock())))
+                         list(self.inspector.inspect_disks(mock.Mock(), None)))
 
         # Current metric data
         mock_cur = self._build_cur_mock_stor_metrics()
@@ -399,7 +400,7 @@ class TestPowerVMInspector(base.BaseTestCase):
         self.mock_metrics.get_latest_metric.return_value = cur_date, mock_cur
 
         # Execute
-        resp = list(self.inspector.inspect_disks(mock.Mock()))
+        resp = list(self.inspector.inspect_disks(mock.Mock(), None))
         self.assertEqual(3, len(resp))
 
         # Two vSCSIs.
