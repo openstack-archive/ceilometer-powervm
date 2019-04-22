@@ -2,7 +2,6 @@
     templates:
       - check-requirements
       - openstack-python-jobs-ceilometer
-      - openstack-python35-jobs-ceilometer
       - openstack-python36-jobs-ceilometer
       - periodic-stable-jobs-ceilometer
       - openstack-lower-constraints-jobs-ceilometer
