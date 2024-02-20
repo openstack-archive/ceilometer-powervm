@@ -1,7 +1,0 @@
-- project:
-    templates:
-      - check-requirements
-      - openstack-python-jobs-ceilometer
-      - openstack-python3-train-jobs-ceilometer
-      - periodic-stable-jobs-ceilometer
-      - openstack-lower-constraints-jobs-ceilometer
